@@ -1,0 +1,3 @@
+---
+# Let Hiera knows that db-01 should use 'roles::database'
+server::role: 'roles::database'

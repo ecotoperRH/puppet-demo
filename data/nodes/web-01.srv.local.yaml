@@ -1,0 +1,3 @@
+---
+# Let Hiera knows that web-01 should use 'roles::web_server'
+server::role: 'roles::web_server'
