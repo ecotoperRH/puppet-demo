@@ -1,0 +1,9 @@
+# Store all cache information in /var/cache
+cachedir: '/var/cache/r10k'
+
+sources:
+  main:
+    # Change 'remote' to your remote repository path (GitHub or GitLab, etc.)
+    remote: 'git@gitlab.com:binhdt2611/puppet-demo.git'
+    # Directory where we want r10k pull branches as environments into
+    basedir: '/etc/puppetlabs/code/environments'

@@ -7,6 +7,8 @@ Here is the basic structure after setting up roles and profiles
 
 ```Bash
 .
+├── Puppetfile
+├── README.md
 ├── data
 │   └── nodes
 │       ├── db-01.srv.local.yaml
@@ -15,7 +17,7 @@ Here is the basic structure after setting up roles and profiles
 ├── hiera.yaml
 ├── manifests
 │   └── sites.pp
-├── readme.md
+├── r10k.yaml
 └── site
     ├── profiles
     │   ├── files
@@ -40,8 +42,14 @@ Here is the basic structure after setting up roles and profiles
             ├── database.pp
             └── web_server.pp
 ```
-# Install dependencies Puppet modules
-To implement this demo, I have installed a few Puppet Modules from Puppet Forge so that we don't have to write our own modules. Therefore, when we set up this project, run these commands:
+
+
+# Install dependencies Puppet modules (Optional)
+I have used several Puppet Forge modules when implementing this demo.
+
+Later, I have added Puppetfile and r10k to manage these modules in environments. You don't have to run these manual commands below if you use r10k.
+
+Otherwise, if you don't use r10k and just follows [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/) only, when we set up this project, please run these commands:
 
 1. Install: [db-golang](https://forge.puppet.com/modules/dp/golang/readme) module
 ```bash
@@ -60,8 +68,4 @@ $ sudo /opt/puppetlabs/bin/puppet module install puppet-nginx
 $ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apt
 ```
 
-For more information, I've written a blog at [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/) to demonstrate this project.
-
-
-NOTE: In the future, I may add a guide to implement R10K to manage this project as source code to deploy it into multiple environments, and also manage these modules through a Puppetfile instead of installing manually like this.
 
