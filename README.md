@@ -68,4 +68,9 @@ $ sudo /opt/puppetlabs/bin/puppet module install puppet-nginx
 $ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apt
 ```
 
+3. Install: [puppetlabs-mysql](https://forge.puppet.com/modules/puppetlabs/apt/readme)
+```bash
+$ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-mysql
+```
+
 
