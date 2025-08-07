@@ -10,6 +10,10 @@ defaults:
 hierarchy:
   - name: "Per-node data (yaml version) overrides all config defined in file below"
     path: "nodes/%{::trusted.certname}.yaml"
+  - name: "Per-group data - Set configuration for nodes that has the same group if the data is the same between them"
+    path: "nodes/%{facts.server_group}.yaml"
+  - name: "Default Consul-config data for all nodes"
+    path: "consul/default.yaml"
   - name: "Default MySQL-config data for all nodes"
     path: "mysql/default.yaml"
   - name: "Other YAML hierarchy levels"

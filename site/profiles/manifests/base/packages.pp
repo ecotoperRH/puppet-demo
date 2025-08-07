@@ -7,6 +7,7 @@ class profiles::base::packages {
     'socat',
     'net-tools',
     'curl',
+    'unzip',
   ]
 
   package { $packages:

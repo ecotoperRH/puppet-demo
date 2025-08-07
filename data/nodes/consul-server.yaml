@@ -1,0 +1,15 @@
+---
+lookup_options:
+  profiles::consul::configs:
+    merge: hash
+
+# Let Hiera knows that consul-0* servers should use 'roles::consul'
+server::role: 'roles::consul'
+
+# profiles::consul::configs inherits configuration from ../consul/default.yaml
+# It overrides/adds the options below with its own settings for consul-0* servers (server mode)
+profiles::consul::configs:
+  server: true
+  bootstrap_expect: 3
+  ui_config:
+    enabled: true

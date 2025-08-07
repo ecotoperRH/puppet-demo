@@ -1,0 +1,38 @@
+---
+# lookup_options specifies which merge behaviour Hiera should use to aggregate data from specified keyword.
+# E.g. keyword 'profiles::consul::configs' should use merge_behaviour is "hash"
+# Visit https://help.puppet.com/core/8/Content/PuppetCore/hiera_automatic.htm to know more.
+lookup_options:
+  profiles::consul::configs:
+    merge: hash
+
+# Default config used by all servers that install Consul (both server/agent mode)
+profiles::consul::configs:
+  node_name: "%{facts.networking.hostname}"
+  # Basically, 'advertise_addr' is the IP address that server use to communicate with other nodes
+  # GetInterfaceIP returns the IP address on "eth1". Change "eth1" to your network interface name corresponding on your servers
+  # Or set it to "%{facts.networking.ip}" if you have only 1 network interface on your servers.
+  advertise_addr: "{{ GetInterfaceIP \"eth1\" }}"
+  client_addr: "0.0.0.0"
+  # Change \"192.168.68.0/24\" to your network address where the 'advertise_addr' is on
+  bind_addr: "{{ GetAllInterfaces | include \"network\" \"192.168.68.0/24\" | sort \"size,address\" | attr \"address\" }}"
+  data_dir: '/opt/consul'
+  # This is just a demo, when you configure in your real project, 
+  # you should create your own string by running command "consul keygen"
+  # And use "eyaml" to encrypt this string so that Puppet queries by hiera-eyaml. 
+  # Should not hard-code like this way.
+  encrypt: 'zXrwndHlj2mFve09qkl7oq6H4ZbPwKB4c1jOhhHtxys='
+  # We must enable this parameter to opt-in health checks that run scripts locally
+  # Used for registering service that we configure later
+  enable_local_script_checks: true
+  datacenter: 'dc1'
+  log_level: 'INFO'
+  # By default, we set server to "false" so that all agent node can join in cluster
+  # We will later add this config per group to enable "server" mode for consul-0* servers only
+  server: false
+  # Declared 3 Consul server nodes so that these servers can form a cluster. 
+  # Also for other agent nodes can join to the cluster.
+  retry_join:
+    - 'consul-01.srv.local'
+    - 'consul-02.srv.local'
+    - 'consul-03.srv.local'

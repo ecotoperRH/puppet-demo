@@ -5,4 +5,5 @@
 class roles::web_server inherits roles::base {
   include profiles::golang
   include profiles::nginx
+  include profiles::consul
 }
