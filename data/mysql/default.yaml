@@ -1,0 +1,19 @@
+---
+# Defult optional configs for all nodes if not specified in other areas
+lookup_options:
+  profiles::mysql::override_options:
+    merge: deep
+
+profiles::mysql::override_options:
+  mysqld:
+    bind_address: '0.0.0.0'
+    datadir: '/var/lib/mysql'
+    log_error: '/var/log/mysql/error.log'
+    pid_file: '/var/run/mysqld/mysqld.pid'
+    server_id: '1'
+    innodb_flush_log_at_trx_commit: '1'
+    sync_binlog: '1'
+    log_bin: 'mysql-bin'
+    relay_log: 'mysql-relay-log'
+  mysqld_safe:
+    log_error: '/var/log/mysql/error.log'

@@ -8,8 +8,10 @@ defaults:
   # datadir: data
   # data_hash: yaml_data
 hierarchy:
-  - name: "Per-node data (yaml version)"
+  - name: "Per-node data (yaml version) overrides all config defined in file below"
     path: "nodes/%{::trusted.certname}.yaml"
+  - name: "Default MySQL-config data for all nodes"
+    path: "mysql/default.yaml"
   - name: "Other YAML hierarchy levels"
     paths:
       - "common.yaml"

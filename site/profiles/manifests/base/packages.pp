@@ -6,6 +6,7 @@ class profiles::base::packages {
   $packages = [
     'socat',
     'net-tools',
+    'curl',
   ]
 
   package { $packages:
