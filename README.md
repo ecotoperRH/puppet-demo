@@ -1,9 +1,13 @@
 # Puppet - Demo Roles and Profiles
 
-This project explains how to implement Roles and Profiles as the best practice in design pattern for Puppet.
+This project is a home lab where I explain how to implement Roles and Profiles as the best practice in design pattern for Puppet.
+
+It also provides use cases where we apply Puppet to automate setup tasks for different services. 
+
+Each use case will corresponding to blog posts that I wrote at https://turndevopseasier.com. Those blog posts belong to the Puppet series that I created. You can visit
 
 # Structure
-Here is the basic structure after setting up roles and profiles
+Here is the basic structure after setting up roles and profiles if you follow [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/)
 
 ```Bash
 .
@@ -11,8 +15,9 @@ Here is the basic structure after setting up roles and profiles
 ├── README.md
 ├── data
 │   └── nodes
-│       ├── db-01.srv.local.yaml
-│       └── web-01.srv.local.yaml
+│       ├── <certname-1>.yaml
+│       └── <certname-2>.yaml
+|        ..... Other configs.
 ├── environment.conf
 ├── hiera.yaml
 ├── manifests
@@ -36,41 +41,17 @@ Here is the basic structure after setting up roles and profiles
     │       ├── golang.pp
     │       ├── mysql.pp
     │       └── nginx.pp
+    |        ..... Other configs.
     └── roles
         └── manifests
             ├── base.pp
             ├── database.pp
             └── web_server.pp
+            ..... Other configs.
 ```
 
+# Puppet Modules
+This project uses Puppetfile and r10k to manage Puppet module dependencies. That reduces the manual installation for each module we use.
 
-# Install dependencies Puppet modules (Optional)
-I have used several Puppet Forge modules when implementing this demo.
-
-Later, I have added Puppetfile and r10k to manage these modules in environments. You don't have to run these manual commands below if you use r10k.
-
-Otherwise, if you don't use r10k and just follows [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/) only, when we set up this project, please run these commands:
-
-1. Install: [db-golang](https://forge.puppet.com/modules/dp/golang/readme) module
-```bash
-$ wget -O ~/dp-golang-1.2.8.tar.gz https://github.com/danielparks/puppet-golang/releases/download/v1.2.8/dp-golang-1.2.8.tar.gz
-
-$ sudo /opt/puppetlabs/bin/puppet module install ~/dp-golang-1.2.8.tar.gz
-```
-
-2. Install: [puppet-nginx](https://forge.puppet.com/modules/puppet/nginx/readme)
-```bash
-$ sudo /opt/puppetlabs/bin/puppet module install puppet-nginx
-```
-
-2. Install: [puppetlabs-apt](https://forge.puppet.com/modules/puppetlabs/apt/readme)
-```bash
-$ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apt
-```
-
-3. Install: [puppetlabs-mysql](https://forge.puppet.com/modules/puppetlabs/apt/readme)
-```bash
-$ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-mysql
-```
-
+r10k will automatically roll out modules to the corresponding environments that we develop.
 

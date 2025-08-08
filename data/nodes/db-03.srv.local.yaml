@@ -1,0 +1,14 @@
+---
+lookup_options:
+  profiles::mysql::override_options:
+    merge: deep
+
+# Let Hiera knows that db-03 should use 'roles::database'
+server::role: 'roles::database'
+
+# Optional configs for slave node
+profiles::mysql::is_master: false
+profiles::mysql::override_options:
+  mysqld:
+    server_id: '3'
+    innodb_flush_log_at_trx_commit: '2'
