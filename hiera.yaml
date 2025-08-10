@@ -5,8 +5,8 @@ defaults:
   # file (this file)
   # When specifying a datadir, make sure the directory exists.
   # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
-  # datadir: data
-  # data_hash: yaml_data
+  datadir: data
+  data_hash: yaml_data
 hierarchy:
   - name: "Per-node data (yaml version) overrides all config defined in file below"
     path: "nodes/%{::trusted.certname}.yaml"
@@ -16,6 +16,17 @@ hierarchy:
     path: "consul/default.yaml"
   - name: "Default MySQL-config data for all nodes"
     path: "mysql/default.yaml"
+  
+  # Here is an example of enabling hiera-eyaml for "eyaml" files
+  - name: "Encrypted data for per-node and shared"
+    paths:
+      - "secrets/%{::trusted.certname}.eyaml"
+      - "secrets/shared.eyaml"
+    lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/private_key.pkcs7.pem
+      pkcs7_public_key:  /etc/puppetlabs/puppet/eyaml/public_key.pkcs7.pem
+
   - name: "Other YAML hierarchy levels"
     paths:
       - "common.yaml"
