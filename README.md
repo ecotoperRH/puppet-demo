@@ -4,7 +4,7 @@ This project is a home lab where I explain how to implement Roles and Profiles a
 
 It also provides use cases where we apply Puppet to automate setup tasks for different services. 
 
-Each use case will corresponding to blog posts that I wrote at https://turndevopseasier.com. Those blog posts belong to the Puppet series that I created. You can visit
+Each use case will corresponding to blog posts that I wrote at https://turndevopseasier.com. Those blog posts belong to the [Puppet series](https://turndevopseasier.com/puppet-series/) that I created. You can visit my website to check documentation.
 
 # Structure
 Here is the basic structure after setting up roles and profiles if you follow [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/)
@@ -54,4 +54,7 @@ Here is the basic structure after setting up roles and profiles if you follow [M
 This project uses Puppetfile and r10k to manage Puppet module dependencies. That reduces the manual installation for each module we use.
 
 r10k will automatically roll out modules to the corresponding environments that we develop.
+
+# Hiera-eyaml
+For the sensitive data encrypted in this project, I configure a set of public/private keys locally on the puppet-master to encrypt/decrypt sensitive data. If you want to clone this project to work on it, you will need to create a set of pub/priv keys for yourself, and replace all the encrypted data with your own data.
 
