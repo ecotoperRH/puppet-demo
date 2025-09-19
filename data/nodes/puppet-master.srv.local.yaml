@@ -1,0 +1,3 @@
+---
+# Let Hiera knows that puppet-master server should use 'roles::puppetmaster'
+server::role: 'roles::puppetmaster'

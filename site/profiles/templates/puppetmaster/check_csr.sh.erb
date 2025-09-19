@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Define a shared PASSWORD that CA uses to compare with a password sent by agent
+PASSWORD="<%= @challenge_password %>"
+
+# Capture the certname (FQDN) passed as argument from the request. E.g. agent-01.example.com
+CERT_NAME=$1
+
+METADATA_DIR="/etc/puppetlabs/puppet/nodes_metadata"
+# Capture NODE_UUID's value
+NODE_UUID=$(cat ${METADATA_DIR}/${CERT_NAME}.metadata | grep node_uuid | awk -F'"' '/node_uuid/ {print $2}')
+
+# Capture SERVICE_NAME's value
+SERVICE_NAME=$(cat ${METADATA_DIR}/${CERT_NAME}.metadata | grep service_name | awk -F'"' '/service_name/ {print $2}')
+
+CSR_REQUEST_DIR="/etc/puppetlabs/puppet/ssl/ca/requests"
+# Open CSR sent from the agent:
+# 1. grep the password supplied, and capture its value
+AGENT_PASSWORD=$(openssl req -noout -text -in ${CSR_REQUEST_DIR}/${CERT_NAME}.pem | grep 'challengePassword' | awk '{print substr($2,2)}')
+# 2. grep the node_uuid supplied, and capture its value.  
+AGENT_NODE_UUID=$(openssl req -noout -text -in ${CSR_REQUEST_DIR}/${CERT_NAME}.pem | grep -A1 1.3.6.1.4.1.34380.1.1.1 | awk 'FNR==2{print substr($1,3)}')
+# 3. grep the service_name supplied, and capture its value
+AGENT_SERVICE_NAME=$(openssl req -noout -text -in ${CSR_REQUEST_DIR}/${CERT_NAME}.pem | grep -A1 1.3.6.1.4.1.34380.1.1.9 | awk 'FNR==2{print substr($1,3)}')
+
+# Compare data on puppet-master vs data provided by agent. Must match 3 conditions to autosign:
+if [ "$AGENT_PASSWORD" == "$PASSWORD" ] && [ "$AGENT_NODE_UUID" == "$NODE_UUID" ] && [ "$AGENT_SERVICE_NAME" == "$SERVICE_NAME" ]; then
+    STATUS=0
+    echo "Approved agent: ${CERT_NAME}"
+else
+    STATUS=1
+    echo "*!ALERT!* ${CERT_NAME}'s password is incorrect or missing"
+fi
+exit $STATUS
