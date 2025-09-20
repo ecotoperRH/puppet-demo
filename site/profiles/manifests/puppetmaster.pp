@@ -13,6 +13,6 @@ class profiles::puppetmaster (
     content => template('profiles/puppetmaster/check_csr.sh.erb'),
     owner   => 'root',
     group   => 'root',
-    mode    => '0751',
+    mode    => '0755',
   }
 }
