@@ -1,0 +1,22 @@
+---
+# Let Hiera knows that "gitlab-server" server should use 'roles::gitlab'
+server::role: 'roles::gitlab'
+
+# The main class (init.pp) exposes the configuration sections from the gitlab.rb configuration file as hashes
+# All these parameters we use below can be found in 
+# https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+
+# Set an external url where the GitLab server can be reached
+# Change this to your own URL. 
+gitlab::external_url: 'http://gitlab.turndevopseasier.com'
+
+# Other optional options for Rails
+# You can skip these config below if you just want to use the default.
+# The idea is to show you how we can change the GitLab config through Hiera.
+gitlab::gitlab_rails:
+  time_zone: 'Pacific/Auckland'         # Change to your time_zone
+  gitlab_email_enabled: false           # disable email as I'm running locally
+  gitlab_default_theme: 2               # Use Dark theme
+  gitlab_email_display_name: 'GitLab'   
+gitlab::sidekiq:
+  shutdown_timeout: 5

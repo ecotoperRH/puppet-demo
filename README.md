@@ -4,7 +4,10 @@ This project is a home lab where I explain how to implement Roles and Profiles a
 
 It also provides use cases where we apply Puppet to automate setup tasks for different services. 
 
-Each use case will corresponding to blog posts that I wrote at https://turndevopseasier.com. Those blog posts belong to the [Puppet series](https://turndevopseasier.com/puppet-series/) that I created. You can visit my website to check documentation.
+Each use case will correspond to blog posts that I wrote at https://turndevopseasier.com. Those blog posts belong to the [Puppet series](https://turndevopseasier.com/puppet-series/) that I created. You can visit my website to check documentation.
+
+# Prerequisite
+I'm using Puppet 8 for this development, if you haven't set up, you could follow my [Setup Puppet 8 on Ubuntu 24.04 – Configuration Management for a scaling enterprise](https://turndevopseasier.com/2025/04/10/setup-puppet-8-on-ubuntu-24-04-configuration-management-for-a-scaling-enterprise/) blog to set this up first.
 
 # Structure
 Here is the basic structure after setting up roles and profiles if you follow [Mastering Puppet: Implementing Roles and Profiles Effectively In Reality](https://turndevopseasier.com/2025/04/23/mastering-puppet-implementing-roles-and-profiles-effectively/)
