@@ -11,4 +11,6 @@ class profiles::consul (
   class { 'consul':
     config_hash => $configs,
   }
+
+  # Install and Configure consul-template
 }

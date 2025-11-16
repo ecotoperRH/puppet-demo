@@ -1,0 +1,32 @@
+---
+
+# We set expected commands to NRPE config file on all servers (including nagios-server itself).
+# If we wish to check more services, can add them here but best to check which plugin command it has
+# Commands are found in /usr/lib/nagios/plugins/
+nrpe::commands:
+  check_users:
+    ensure: present
+    command: 'check_users -w 5 -c 10'
+  check_load:
+    ensure: present
+    command: 'check_load -r -w .15,.10,.05 -c .30,.25,.20'
+  # Remember change disk to your corresponding disk names
+  check_sda2:
+    ensure: present
+    command: 'check_disk -w 20% -c 10% -p /dev/sda2'
+  check_zombie_procs:
+    ensure: present
+    command: 'check_procs -w 5 -c 10 -s Z'
+  check_total_procs:
+    ensure: present
+    command: 'check_procs -w 150 -c 200'
+
+
+# Define Command Definitions to tell Nagios server where to run the command
+# In this case, we need to execute 'check_npre' command on nagios-server
+# so that it runs expected commands that we set in 'nrpe::comands'.
+# We can run any check_<command> that we need. These commands could be custom scripts or scripts provided by plugins
+profiles::nagios::commands:
+  check_nrpe:
+    command_name: check_nrpe
+    command_line: /usr/lib/nagios/plugins/check_nrpe -u -H $HOSTADDRESS$ -t 60 -c $ARG1$

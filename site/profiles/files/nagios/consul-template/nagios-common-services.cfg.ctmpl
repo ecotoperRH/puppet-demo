@@ -1,0 +1,51 @@
+{{ range nodes }}
+define service {
+    check_command                  check_nrpe!check_users
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check users login
+    use                            hosts-service
+}
+
+define service {
+    check_command                  check_nrpe!check_load
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check load service
+    use                            hosts-service
+}
+
+define service {
+    check_command                  check_nrpe!check_mem
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check load service
+    use                            hosts-service
+}
+
+
+define service {
+    check_command                  check_nrpe!check_sda2
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check disk space
+    use                            hosts-service
+}
+
+define service {
+    check_command                  check_nrpe!check_zombie_procs
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check Zombie Procs
+    use                            hosts-service
+}
+
+define service {
+    check_command                  check_nrpe!check_total_procs
+    host_name                      {{.Node}}
+    notification_period            24x7
+    service_description            Check Total Procs
+    use                            hosts-service
+}
+
+{{ end }}

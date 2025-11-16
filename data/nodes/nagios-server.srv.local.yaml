@@ -1,0 +1,4 @@
+---
+
+# Let Hiera knows that nagios-server should use 'roles::nagios'
+server::role: 'roles::nagios'

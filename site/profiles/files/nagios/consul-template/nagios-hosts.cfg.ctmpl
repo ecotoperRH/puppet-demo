@@ -1,0 +1,9 @@
+## This file is managed and matained by consul-template
+{{ range nodes }}
+define host {
+    address                        {{.Address}}
+    alias                          {{.Node}}
+    host_name                      {{.Node}}
+    use                            all-servers
+}
+{{ end }}

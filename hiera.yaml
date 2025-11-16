@@ -16,6 +16,8 @@ hierarchy:
     path: "consul/default.yaml"
   - name: "Default MySQL-config data for all nodes"
     path: "mysql/default.yaml"
+  - name: "Default Nagios-config data for all nodes"
+    path: "nagios/default.yaml"
   
   # Here is an example of enabling hiera-eyaml for "eyaml" files
   - name: "Encrypted data for per-node and shared"

@@ -1,0 +1,3 @@
+---
+# Let Hiera knows that app-01 should use 'roles::application'
+server::role: 'roles::application'
