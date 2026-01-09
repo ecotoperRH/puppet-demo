@@ -7,6 +7,10 @@ mod 'puppetlabs-apt', '10.0.1'
 mod 'puppetlabs-mysql', '16.2.0'
 mod 'puppetlabs-inifile', '6.2.0'
 mod 'puppetlabs-nagios_core', '1.0.3'
+mod 'puppetlabs-firewall', '8.2.0'
+mod 'puppetlabs-postgresql', '10.6.1'
+mod 'puppetlabs-puppetdb', '8.1.0'
+
 
 # Secondly prefered modules from Vox Populi (Puppet)
 mod 'puppet-archive', '7.1.0'
