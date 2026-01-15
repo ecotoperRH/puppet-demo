@@ -26,13 +26,12 @@ class profiles::puppetmaster (
   }
 
   # Configure puppetdb and its underlying database
-  # NOTE: Because I'm installing Puppet Server/agent packages under Openvox Repo
-  # They are openvox-server/openvox-agent
+  # NOTE: Because I'm using Puppet Server/agent packages under Openvox Repo
+  # They are openvox-server/openvox-agent packages.
   # Therefore, the package name of PuppetDB should become 'openvoxdb' instead of 'puppetdb'. It's just a change of package name only
   # Other commands in regard to PuppetDB remain the same under openvoxdb package
   class { 'puppetdb':
     puppetdb_package  => 'openvoxdb',
-    terminus_package  => 'openvoxdb-termini',
     database_password => $puppetdb_database_password,   # Change the default password 'puppetdb' to my own
     java_args         => {
       '-Xmx' => '512m',
@@ -41,5 +40,8 @@ class profiles::puppetmaster (
   }
 
   # Configure the Puppet Server to use puppetdb
-  class { 'puppetdb::master::config': }
+  # We also need to change terminus_package name to the corresponding openvox package to avoid module error
+  class { 'puppetdb::master::config':
+    terminus_package  => 'openvoxdb-termini',
+  }
 }
