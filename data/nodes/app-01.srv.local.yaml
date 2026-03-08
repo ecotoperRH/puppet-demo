@@ -1,3 +1,24 @@
 ---
 # Let Hiera knows that app-01 should use 'roles::application'
 server::role: 'roles::application'
+
+
+# The lookup_options makes profiles::release::applications merge the DB credentials 
+# that we defined in data/secrets/app-01.srv.local.eyaml
+lookup_options:
+  profiles::release::applications:
+    merge: deep
+
+profiles::release::applications:
+  # Here are the list of parameters at least I need to configure my todo-app
+  # You could set more or less depends on your app.
+  todo:
+    # the parameters below correlate with parameters set in the profiles::release::app resource
+    prefix_api_url: 'https://gitlab.com/api/v4/projects'
+    project_id: '63145046'
+    domain_url: 'mytodo.srv.local'
+    app_command_args:
+      - 'agent'
+    db_host: 'todo-postgres.srv.local'
+    db_port: 5432
+    db_name: 'todos'

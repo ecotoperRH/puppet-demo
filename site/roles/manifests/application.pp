@@ -5,4 +5,5 @@
 class roles::application inherits roles::base {
   include profiles::nagios::nrpe
   include profiles::consul
+  include profiles::release
 }
