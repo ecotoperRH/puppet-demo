@@ -1,0 +1,104 @@
+[
+  {
+    "name": "profiles-base",
+    "path": "site/profiles/manifests/base.pp and site/profiles/manifests/base/",
+    "description": "Provides common host preparation for all roles, including baseline packages, custom Facter directories, and shared directory structure.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-consul",
+    "path": "site/profiles/manifests/consul.pp and site/profiles/manifests/consul/",
+    "description": "Installs and configures Consul agents and servers, including cluster joining, local checks, and Consul-template integration.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-mysql",
+    "path": "site/profiles/manifests/mysql.pp and site/profiles/manifests/mysql/",
+    "description": "Provisions MySQL databases, users, grants, tunable server options, and master/slave replication behavior.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-nagios",
+    "path": "site/profiles/manifests/nagios.pp and site/profiles/manifests/nagios/",
+    "description": "Installs and configures Nagios Core behind Nginx with plugins, NRPE checks, service templates, and Consul-template integration.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-nginx",
+    "path": "site/profiles/manifests/nginx.pp",
+    "description": "Configures Nginx reverse proxy services and deploys the compiled web-demo application with its systemd unit.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-gitlab",
+    "path": "site/profiles/manifests/gitlab.pp",
+    "description": "Wraps the Puppet GitLab module to install and configure a GitLab server using Hiera-driven settings.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-golang",
+    "path": "site/profiles/manifests/golang.pp",
+    "description": "Installs the Go toolchain required by the web-server role through the external Golang Puppet module.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-puppetmaster",
+    "path": "site/profiles/manifests/puppetmaster.pp",
+    "description": "Configures the Puppet Server and PuppetDB control plane, including PostgreSQL-backed PuppetDB and CSR validation support.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "profiles-release",
+    "path": "site/profiles/manifests/release.pp and site/profiles/manifests/release/app.pp",
+    "description": "Automates application releases from GitLab packages, including archive extraction, symlink switching, systemd services, Nginx proxying, and scheduled polling.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-base",
+    "path": "site/roles/manifests/base.pp",
+    "description": "Base composition role applied to all server roles and including the common host-preparation profile.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-application",
+    "path": "site/roles/manifests/application.pp",
+    "description": "Composes the application server role with release automation, Consul agent configuration, and NRPE monitoring.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-consul",
+    "path": "site/roles/manifests/consul.pp",
+    "description": "Composes the Consul server role with base host preparation and Consul server configuration.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-database",
+    "path": "site/roles/manifests/database.pp",
+    "description": "Composes the MySQL database role with conditional replication configuration for non-master nodes.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-gitlab",
+    "path": "site/roles/manifests/gitlab.pp",
+    "description": "Composes the GitLab server role with base host preparation and the GitLab profile.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-nagios",
+    "path": "site/roles/manifests/nagios.pp",
+    "description": "Composes the monitoring server role with Nagios, NRPE, Consul agent, and Consul-template configuration.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-puppetmaster",
+    "path": "site/roles/manifests/puppetmaster.pp",
+    "description": "Composes the Puppet master and PuppetDB server role with base preparation and control-plane configuration.",
+    "technology": "Puppet"
+  },
+  {
+    "name": "roles-web-server",
+    "path": "site/roles/manifests/web_server.pp",
+    "description": "Composes the web server role with Go, Nginx reverse proxy, the demo application, and Consul agent configuration.",
+    "technology": "Puppet"
+  }
+]
