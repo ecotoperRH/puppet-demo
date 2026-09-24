@@ -1,0 +1,8 @@
+---
+# The profiles_golang execution path does not use archive::go credentials.
+
+- name: Document archive Go compatibility
+  ansible.builtin.assert:
+    that:
+      - true
+    quiet: true

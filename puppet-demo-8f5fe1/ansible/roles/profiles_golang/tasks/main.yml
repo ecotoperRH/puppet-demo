@@ -1,0 +1,9 @@
+---
+- name: Configure archive defaults
+  ansible.builtin.include_tasks: archive_params.yml
+
+- name: Manage Go archive
+  ansible.builtin.include_tasks: archive.yml
+
+- name: Execute profiles_golang profile
+  ansible.builtin.include_tasks: profile_golang.yml

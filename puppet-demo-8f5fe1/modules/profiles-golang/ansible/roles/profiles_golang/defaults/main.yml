@@ -1,0 +1,18 @@
+---
+# Go installation settings.
+golang_ensure: present
+golang_version:
+golang_link_binaries:
+  - go
+  - gofmt
+golang_source_prefix: https://go.dev/dl
+golang_source:
+golang_os: "{{ {'Linux': 'linux', 'Darwin': 'darwin'}.get(ansible_facts['kernel'], ansible_facts['kernel']) }}"
+golang_arch: "{{ {'aarch64': 'arm64', 'armv7l': 'armv6l', 'i686': '386', 'x86_64': 'amd64'}.get(ansible_facts['architecture'], 'amd64') }}"
+golang_install_dir: /usr/local/go
+golang_install_owner: root
+golang_install_group: root
+golang_install_mode: "0755"
+golang_state_file: /usr/local/.go.source_url
+golang_binary_dir: /usr/local/bin
+golang_archive_path: /tmp/puppet-golang_usr_local_go.tar.gz

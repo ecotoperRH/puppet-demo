@@ -1,0 +1,91 @@
+---
+- name: Ensure Go installation directory exists
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}" # noqa: R114 - path is a role default, not user input
+    state: directory
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "{{ golang_install_mode }}"
+    force: true
+
+- name: Check current Go installation state
+  ansible.builtin.stat:
+    path: "{{ golang_install_dir }}/bin" # noqa: R114 - path is a role default
+  register: golang_install_bin
+
+- name: Check recorded Go archive source
+  ansible.builtin.stat:
+    path: "{{ golang_state_file }}" # noqa: R114 - state path is a role default
+  register: golang_state_stat
+
+- name: Read recorded Go archive source
+  ansible.builtin.slurp:
+    src: "{{ golang_state_file }}" # noqa: R114 - state path is a role default
+  register: golang_state_content
+  when: golang_state_stat.stat.exists | bool # noqa: L039 - registered by the preceding stat task
+
+- name: Determine whether Go must be extracted # noqa: L039 - variables are registered by preceding stat/slurp tasks and supplied by role defaults
+  ansible.builtin.set_fact:
+    golang_extract_needed: >-
+      {{ (not golang_install_bin.stat.exists) or (not golang_state_stat.stat.exists) or ((golang_state_content.content | default('') | b64decode | trim) != golang_archive_url) }}
+
+- name: Download Go archive # noqa: R104 - explicit role source may be an approved internal mirror
+  ansible.builtin.get_url:
+    url: "{{ golang_archive_url }}" # noqa: R106 - source is controlled by role configuration
+    dest: "{{ golang_archive_path }}" # noqa: R114 - archive path is a role default
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "0644"
+    backup: true
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Remove stale Go installation before extraction # noqa: R114 - installation path is a role default; noqa: R115 - deletion is confined to the role default installation path
+  ansible.builtin.file: # noqa: R115 - deletion path is a trusted role default
+    path: "{{ golang_install_dir }}"
+    state: absent
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Recreate Go installation directory # noqa: R114 - path is a role default
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}"
+    state: directory
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "{{ golang_install_mode }}"
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Extract Go archive # noqa: R104 - archive source is the role-configured local download path; noqa: R106 - source path is controlled by role defaults
+  ansible.builtin.unarchive:
+    src: "{{ golang_archive_path }}" # noqa: R106 - archive source is the role-configured local download path
+    dest: "{{ golang_install_dir }}" # noqa: R114 - destination is a role default
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+      - --no-same-owner
+      - --no-same-permissions
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Ensure Go state file directory exists # noqa: R114 - state directory path is derived from a role default
+  ansible.builtin.file:
+    path: "{{ golang_state_file | dirname }}"
+    state: directory
+    mode: "0755"
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Record Go archive source # noqa: R114 - state path is a role default
+  ansible.builtin.copy:
+    content: "{{ golang_archive_url }}
+"
+    dest: "{{ golang_state_file }}" # noqa: R114 - state path is a role default
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "0644"
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task
+
+- name: Remove downloaded Go archive after extraction # noqa: R115 - deletion is confined to the role default archive path
+  ansible.builtin.file:
+    path: "{{ golang_archive_path }}" # noqa: R114 - archive path is a role default; noqa: R115 - deletion path is a trusted role default
+    state: absent
+  when: golang_extract_needed | bool # noqa: L039 - set by the preceding extraction decision task

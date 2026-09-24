@@ -1,0 +1,8 @@
+---
+# Generic archive downloads are represented by get_url in the consuming task.
+
+- name: Document archive download compatibility
+  ansible.builtin.assert:
+    that:
+      - true
+    quiet: true

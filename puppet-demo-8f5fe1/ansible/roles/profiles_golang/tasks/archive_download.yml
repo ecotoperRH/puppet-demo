@@ -1,0 +1,11 @@
+---
+- name: Download archive compatibility artifact
+  ansible.builtin.get_url:
+    url: "{{ archive_download_url }}"
+    dest: "{{ archive_download_dest }}"
+    checksum: "{{ archive_download_checksum | default(omit) }}"
+    mode: '0644'
+    backup: true
+  when:
+    - archive_download_url is defined
+    - archive_download_dest is defined

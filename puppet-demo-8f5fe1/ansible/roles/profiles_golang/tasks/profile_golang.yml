@@ -1,0 +1,9 @@
+---
+- name: Run profiles_golang profile entry point
+  ansible.builtin.include_tasks: golang_init.yml
+
+- name: Install Go
+  ansible.builtin.include_tasks: installation.yml
+
+- name: Link Go commands
+  ansible.builtin.include_tasks: linked_binaries.yml

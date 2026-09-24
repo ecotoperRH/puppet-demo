@@ -1,0 +1,26 @@
+---
+- name: Create Go binary directory
+  ansible.builtin.file:
+    path: "{{ golang_binary_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Link Go binaries
+  ansible.builtin.file:
+    src: "{{ golang_install_dir }}/bin/{{ item_golang_binary }}"
+    dest: "{{ golang_binary_dir }}/{{ item_golang_binary }}"
+    state: link
+    force: true
+  loop: "{{ golang_link_binaries }}"
+  loop_control:
+    loop_var: item_golang_binary
+  when: golang_ensure != 'absent'
+
+- name: Remove Go binary links
+  ansible.builtin.file:
+    path: "{{ golang_binary_dir }}/{{ item_golang_binary }}"
+    state: absent
+  loop: "{{ golang_link_binaries }}"
+  loop_control:
+    loop_var: item_golang_binary
+  when: golang_ensure == 'absent'

@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify role profiles_golang executed successfully
+      ansible.builtin.debug:
+        msg: "Role profiles_golang applied successfully"

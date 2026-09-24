@@ -1,0 +1,37 @@
+---
+- name: Ensure Go archive staging directory exists
+  ansible.builtin.file:
+    path: "{{ golang_archive_path | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: Download Go archive
+  ansible.builtin.get_url:
+    url: "{{ golang_archive_url }}"
+    dest: "{{ golang_archive_path }}"
+    mode: '0644'
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    backup: true
+  register: golang_archive_download
+
+- name: Extract Go archive
+  ansible.builtin.unarchive:
+    src: "{{ golang_archive_path }}"
+    dest: "{{ golang_install_dir }}"
+    remote_src: true
+    extra_opts:
+      - '--strip-components=1'
+      - '--no-same-owner'
+      - '--no-same-permissions'
+    creates: "{{ golang_install_dir }}/bin"
+  when: golang_archive_download.changed or not (golang_install_dir ~ '/bin') is exists
+
+- name: Set ownership on Go installation
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}"
+    state: directory
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "{{ golang_install_mode }}"
+    recurse: true

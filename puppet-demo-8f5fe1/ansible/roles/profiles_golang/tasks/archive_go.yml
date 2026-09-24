@@ -1,0 +1,14 @@
+---
+- name: Download Go archive from legacy archive::go inputs
+  ansible.builtin.get_url:
+    url: "http://{{ archive_go_server }}:{{ archive_go_port }}/{{ archive_go_url_path }}"
+    dest: "{{ archive_go_path }}"
+    mode: "{{ archive_go_mode | default(archive_default_mode) }}"
+    owner: "{{ archive_go_owner | default(archive_default_owner) }}"
+    group: "{{ archive_go_group | default(archive_default_group) }}"
+    backup: true
+  when:
+    - archive_go_server is defined
+    - archive_go_port is defined
+    - archive_go_url_path is defined
+    - archive_go_path is defined

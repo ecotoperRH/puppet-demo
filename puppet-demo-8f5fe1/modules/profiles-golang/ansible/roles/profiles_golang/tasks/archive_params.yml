@@ -1,0 +1,8 @@
+---
+- name: Define archive module defaults # noqa: L039 - variable is checked before conditional role compatibility defaults
+  ansible.builtin.set_fact:
+    archive_default_path: /opt/staging
+    archive_default_owner: root
+    archive_default_group: root
+    archive_default_mode: "0640"
+  when: archive_default_path is not defined

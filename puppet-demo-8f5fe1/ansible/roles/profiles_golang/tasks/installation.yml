@@ -1,0 +1,12 @@
+---
+- name: Create Go installation directory
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}"
+    state: directory
+    owner: "{{ golang_install_owner }}"
+    group: "{{ golang_install_group }}"
+    mode: "{{ golang_install_mode }}"
+
+- name: Include archive installation tasks
+  ansible.builtin.include_tasks: from_tarball.yml
+  when: golang_ensure != 'absent'

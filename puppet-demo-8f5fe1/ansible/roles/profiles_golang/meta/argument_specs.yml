@@ -1,0 +1,76 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure the Go toolchain
+    description:
+      - Downloads the latest or requested Go release and installs it under the configured directory.
+      - Creates links for selected Go binaries in the configured binary directory.
+    options:
+      golang_ensure:
+        type: str
+        required: false
+        default: 'present'
+        description: Installation state or requested Go version.
+      golang_version:
+        type: str
+        required: false
+        default: null
+        description: Optional Go version; when unset the stable download API is queried.
+      golang_link_binaries:
+        type: list
+        elements: str
+        required: false
+        default:
+          - 'go'
+          - 'gofmt'
+        description: Go binaries to link into the binary directory.
+      golang_source_prefix:
+        type: str
+        required: false
+        default: 'https://go.dev/dl'
+        description: Base URL for Go downloads.
+      golang_source:
+        type: str
+        required: false
+        default: null
+        description: Optional complete archive URL.
+      golang_install_dir:
+        type: str
+        required: false
+        default: '/usr/local/go'
+        description: Go installation directory.
+      golang_binary_dir:
+        type: str
+        required: false
+        default: '/usr/local/bin'
+        description: Directory receiving Go binary links.
+      golang_install_owner:
+        type: str
+        required: false
+        default: 'root'
+        description: Owner of the installation.
+      golang_install_group:
+        type: str
+        required: false
+        default: 'root'
+        description: Group of the installation.
+      golang_install_mode:
+        type: str
+        required: false
+        default: '0755'
+        description: Mode for the installation directory.
+      golang_state_file:
+        type: str
+        required: false
+        default: '/usr/local/.go.source_url'
+        description: Compatibility path for the source URL state.
+      golang_os:
+        type: str
+        required: false
+        default: null
+        description: Go archive operating-system identifier.
+      golang_arch:
+        type: str
+        required: false
+        default: null
+        description: Go archive architecture identifier.

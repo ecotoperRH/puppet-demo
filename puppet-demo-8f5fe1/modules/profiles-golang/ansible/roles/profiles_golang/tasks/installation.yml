@@ -1,0 +1,10 @@
+---
+- name: Install Go from the selected archive
+  ansible.builtin.include_tasks: from_tarball.yml
+  when: golang_ensure != 'absent'
+
+- name: Remove Go installation # noqa: R115 - deletion is confined to the role default installation path
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}" # noqa: R114 - installation path is a role default
+    state: absent
+  when: golang_ensure == 'absent'

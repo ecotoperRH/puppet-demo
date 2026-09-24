@@ -1,0 +1,3 @@
+---
+- name: No handlers are required for Go toolchain installation
+  ansible.builtin.meta: noop

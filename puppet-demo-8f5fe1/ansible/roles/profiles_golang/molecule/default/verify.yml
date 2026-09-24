@@ -1,0 +1,122 @@
+---
+- name: Verify Go platform and prerequisites
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Assert the host uses a supported Go platform identifier
+      ansible.builtin.assert:
+        that:
+          - ansible_facts['kernel'] in ['Linux', 'Darwin']
+          - ansible_facts['architecture'] in ['aarch64', 'armv7l', 'i686', 'x86_64']
+        fail_msg: "The test host does not use a supported Go platform"
+
+    - name: Verify access to the Go download endpoint
+      ansible.builtin.uri:
+        url: https://go.dev/dl/
+        method: GET
+        status_code: 200
+        return_content: false
+
+    - name: Verify /usr/local is writable
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/test
+          - -w
+          - /usr/local
+      changed_when: false
+
+    - name: Verify the installation owner exists
+      ansible.builtin.getent:
+        database: passwd
+        key: root
+
+    - name: Verify the installation group exists
+      ansible.builtin.getent:
+        database: group
+        key: root
+
+    - name: Check the Go installation directory
+      ansible.builtin.stat:
+        path: /usr/local/go
+      register: golang_install_stat
+
+    - name: Assert the Go installation directory is present
+      ansible.builtin.assert:
+        that:
+          - golang_install_stat['stat']['exists']
+          - golang_install_stat['stat']['isdir']
+        fail_msg: "Go installation directory is missing"
+
+    - name: Check Go executables
+      ansible.builtin.stat:
+        path: "{{ item_golang_executable }}"  # noqa: R114 - fixed verification paths written by this test
+      loop:
+        - /usr/local/go/bin/go
+        - /usr/local/go/bin/gofmt
+      loop_control:
+        loop_var: item_golang_executable
+      register: golang_executable_stats
+
+    - name: Assert Go executables are present
+      ansible.builtin.assert:
+        that:
+          - item_result['stat']['exists']
+          - item_result['stat']['isreg']
+          - item_result['stat']['executable']
+        fail_msg: "Expected Go executable is missing"
+      loop: "{{ golang_executable_stats['results'] }}"
+      loop_control:
+        loop_var: item_result
+
+    - name: Check Go command symlinks
+      ansible.builtin.stat:
+        path: "{{ item_golang_link['path'] }}"  # noqa: R114 - fixed verification paths written by this test
+        follow: false
+      loop:
+        - path: /usr/local/bin/go
+          target: /usr/local/go/bin/go
+        - path: /usr/local/bin/gofmt
+          target: /usr/local/go/bin/gofmt
+      loop_control:
+        loop_var: item_golang_link
+      register: golang_link_stats
+
+    - name: Assert Go command symlinks point to the installation
+      ansible.builtin.assert:
+        that:
+          - item_result['stat']['islnk']
+          - item_result['stat']['lnk_source'] == item_result['item']['target']
+        fail_msg: "Expected Go command symlink is missing or has the wrong target"
+      loop: "{{ golang_link_stats['results'] }}"
+      loop_control:
+        loop_var: item_result
+
+    - name: Run the installed Go binary
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/go
+          - version
+      changed_when: false
+      register: golang_version_result
+
+    - name: Assert the installed Go binary runs
+      ansible.builtin.assert:
+        that:
+          - golang_version_result['rc'] == 0
+          - golang_version_result['stdout'] is search('go version')
+        fail_msg: "Installed Go binary did not report its version"
+
+    - name: Run the installed Go formatter
+      ansible.builtin.command:
+        argv:
+          - /usr/local/bin/gofmt
+          - -l
+          - /usr/local/go/src/fmt
+      changed_when: false
+      register: golang_gofmt_result
+
+    - name: Assert the installed Go formatter runs
+      ansible.builtin.assert:
+        that:
+          - golang_gofmt_result['rc'] == 0
+        fail_msg: "Installed gofmt did not execute successfully"

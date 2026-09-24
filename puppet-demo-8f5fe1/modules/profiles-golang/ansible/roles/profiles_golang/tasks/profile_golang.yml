@@ -1,0 +1,10 @@
+---
+- name: Run the profiles_golang entry point
+  ansible.builtin.include_tasks: golang_init.yml
+  when: golang_ensure != 'absent'
+
+- name: Install Go
+  ansible.builtin.include_tasks: installation.yml
+
+- name: Manage Go command links
+  ansible.builtin.include_tasks: linked_binaries.yml

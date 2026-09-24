@@ -1,0 +1,27 @@
+---
+- name: Ensure Go binary directory exists
+  ansible.builtin.file:
+    path: "{{ golang_binary_dir }}" # noqa: R114 - path is a role default
+    state: directory
+    mode: "0755"
+  when: golang_ensure != 'absent'
+
+- name: Link Go binaries
+  ansible.builtin.file:
+    src: "{{ golang_install_dir }}/bin/{{ item_golang_binary }}" # noqa: R114 - target uses role defaults and role-defined list
+    dest: "{{ golang_binary_dir }}/{{ item_golang_binary }}" # noqa: R114 - destination uses role defaults and role-defined list
+    state: link
+    force: true
+  when: golang_ensure != 'absent'
+  loop: "{{ golang_link_binaries }}"
+  loop_control:
+    loop_var: item_golang_binary
+
+- name: Remove Go binary links # noqa: R115 - deletion is confined to role defaults and role-defined binary list
+  ansible.builtin.file:
+    path: "{{ golang_binary_dir }}/{{ item_golang_binary }}" # noqa: R114 - path uses role defaults and role-defined binary list
+    state: absent
+  when: golang_ensure == 'absent'
+  loop: "{{ golang_link_binaries }}"
+  loop_control:
+    loop_var: item_golang_binary

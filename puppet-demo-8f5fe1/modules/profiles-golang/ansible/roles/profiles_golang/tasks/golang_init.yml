@@ -1,0 +1,38 @@
+---
+- name: Set Go archive URL from explicit source
+  ansible.builtin.set_fact:
+    golang_archive_url: "{{ golang_source }}"
+  when: golang_source is not none
+
+- name: Query latest stable Go release metadata
+  ansible.builtin.uri:
+    url: "{{ golang_source_prefix }}/?mode=json"
+    method: GET
+    return_content: true
+    status_code: 200
+  when:
+    - golang_source is none
+    - golang_version is none
+  register: golang_release_response
+
+- name: Validate Go release metadata
+  ansible.builtin.assert:
+    that:
+      - golang_release_response.json is sequence
+      - golang_release_response.json | length > 0
+      - golang_release_response.json[0]['version'] is defined
+      - golang_release_response.json[0]['stable'] | default(false) | bool
+    fail_msg: The Go download API did not return a valid stable release.
+  when:
+    - golang_source is none
+    - golang_version is none
+
+- name: Select Go version
+  ansible.builtin.set_fact:
+    golang_selected_version: "{{ golang_version if golang_version is not none else (golang_release_response.json[0]['version'] | regex_replace('^go', '')) }}" # noqa: L039 - registered by the preceding release metadata task
+  when: golang_source is none
+
+- name: Build Go archive URL
+  ansible.builtin.set_fact:
+    golang_archive_url: "{{ golang_source_prefix }}/go{{ golang_selected_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+  when: golang_source is none

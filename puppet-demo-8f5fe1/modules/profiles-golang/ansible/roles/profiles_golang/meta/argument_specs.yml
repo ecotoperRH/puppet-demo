@@ -1,0 +1,81 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure the Go toolchain
+    description:
+      - Downloads the latest stable Go archive or a configured version.
+      - Extracts Go into the configured installation directory and links its binaries.
+    options:
+      golang_ensure:
+        type: str
+        required: false
+        default: present
+        description: Installation state; use absent to remove Go.
+      golang_version:
+        type: str
+        required: false
+        default:
+        description: Optional Go version without the go prefix.
+      golang_link_binaries:
+        type: list
+        elements: str
+        required: false
+        default:
+          - go
+          - gofmt
+        description: Binaries to link into the binary directory.
+      golang_source_prefix:
+        type: str
+        required: false
+        default: https://go.dev/dl
+        description: Base URL for Go archives and release metadata.
+      golang_source:
+        type: str
+        required: false
+        default:
+        description: Optional complete archive URL.
+      golang_os:
+        type: str
+        required: false
+        default: "{{ {'Linux': 'linux', 'Darwin': 'darwin'}.get(ansible_facts['kernel'], ansible_facts['kernel']) }}"
+        description: Go archive operating-system identifier.
+      golang_arch:
+        type: str
+        required: false
+        default: "{{ {'aarch64': 'arm64', 'armv7l': 'armv6l', 'i686': '386', 'x86_64': 'amd64'}.get(ansible_facts['architecture'], 'amd64') }}"
+        description: Go archive architecture identifier.
+      golang_install_dir:
+        type: str
+        required: false
+        default: /usr/local/go
+        description: Go installation directory.
+      golang_install_owner:
+        type: str
+        required: false
+        default: root
+        description: Owner of the Go installation.
+      golang_install_group:
+        type: str
+        required: false
+        default: root
+        description: Group of the Go installation.
+      golang_install_mode:
+        type: str
+        required: false
+        default: "0755"
+        description: Mode of the Go installation directory.
+      golang_state_file:
+        type: str
+        required: false
+        default: /usr/local/.go.source_url
+        description: Compatibility path for the source URL state file.
+      golang_binary_dir:
+        type: str
+        required: false
+        default: /usr/local/bin
+        description: Directory receiving Go binary links.
+      golang_archive_path:
+        type: str
+        required: false
+        default: /tmp/puppet-golang_usr_local_go.tar.gz
+        description: Temporary path used for the downloaded archive.

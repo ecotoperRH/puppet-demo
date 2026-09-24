@@ -1,0 +1,62 @@
+---
+- name: Validate Go installation settings
+  ansible.builtin.assert:
+    that:
+      - golang_ensure in ['present', 'latest', 'absent'] or (golang_ensure is string and golang_ensure | length > 0)
+      - golang_install_owner is string or golang_install_owner is number
+      - golang_install_group is string or golang_install_group is number
+    fail_msg: 'Invalid Go installation settings.'
+
+- name: Resolve latest stable Go version
+  ansible.builtin.uri:
+    url: "{{ golang_source_prefix }}/?mode=json"
+    method: GET
+    return_content: true
+    status_code: 200
+  register: golang_download_metadata
+  when:
+    - golang_source is none
+    - golang_version is none
+    - golang_ensure in ['present', 'latest']
+
+- name: Validate Go download metadata
+  ansible.builtin.assert:
+    that:
+      - golang_download_metadata.json is sequence
+      - golang_download_metadata.json | length > 0
+      - golang_download_metadata.json[0]['version'] is defined
+      - golang_download_metadata.json[0]['stable'] | bool
+    fail_msg: 'The Go download API returned no stable release.'
+  when:
+    - golang_source is none
+    - golang_version is none
+    - golang_ensure in ['present', 'latest']
+
+- name: Set resolved Go version
+  ansible.builtin.set_fact:
+    golang_resolved_version: "{{ (golang_download_metadata.json | selectattr('stable', 'equalto', true) | list | first)['version'] | replace('go', '', 1) }}"
+  when:
+    - golang_source is none
+    - golang_version is none
+    - golang_ensure in ['present', 'latest']
+
+- name: Set explicitly configured Go version
+  ansible.builtin.set_fact:
+    golang_resolved_version: "{{ golang_version | replace('go', '', 1) }}"
+  when: golang_version is not none
+
+- name: Build Go archive URL
+  ansible.builtin.set_fact:
+    golang_archive_url: "{{ golang_source | default(golang_source_prefix ~ '/go' ~ golang_resolved_version ~ '.' ~ golang_os ~ '-' ~ golang_arch ~ '.tar.gz', true) }}"
+
+- name: Remove Go installation when absent
+  ansible.builtin.file:
+    path: "{{ golang_install_dir }}"
+    state: absent
+  when: golang_ensure == 'absent'
+
+- name: Remove Go state file when absent
+  ansible.builtin.file:
+    path: "{{ golang_state_file }}"
+    state: absent
+  when: golang_ensure == 'absent'

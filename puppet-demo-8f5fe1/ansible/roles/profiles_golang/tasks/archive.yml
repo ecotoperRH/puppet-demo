@@ -1,0 +1,9 @@
+---
+- name: Configure archive defaults
+  ansible.builtin.set_fact:
+    archive_default_owner: 'root'
+    archive_default_group: 'root'
+    archive_default_mode: '0640'
+
+- name: Include archive download compatibility tasks
+  ansible.builtin.include_tasks: archive_download.yml

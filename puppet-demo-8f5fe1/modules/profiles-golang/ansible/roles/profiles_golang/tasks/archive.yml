@@ -1,0 +1,13 @@
+---
+- name: Configure archive defaults # noqa: L039 - variable is checked before conditional role compatibility defaults
+  ansible.builtin.set_fact:
+    archive_default_owner: root
+    archive_default_group: root
+    archive_default_mode: "0640"
+  when: archive_default_owner is not defined
+
+- name: Include archive download support
+  ansible.builtin.include_tasks: archive_download.yml
+
+- name: Include Go archive compatibility support
+  ansible.builtin.include_tasks: archive_go.yml

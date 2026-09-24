@@ -1,0 +1,157 @@
+{
+  "module_name": "profiles_golang",
+  "items": [
+    {
+      "category": "structure",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/defaults/main.yml",
+      "status": "complete",
+      "description": "Role defaults for Golang settings, platform mappings, installation ownership, and paths.",
+      "notes": ""
+    },
+    {
+      "category": "structure",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/handlers/main.yml",
+      "status": "complete",
+      "description": "Role handlers; retain an explicit handler file for standard role structure.",
+      "notes": ""
+    },
+    {
+      "category": "structure",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/tasks/main.yml",
+      "status": "complete",
+      "description": "Main role entry point orchestrating the Golang installation and linked binaries.",
+      "notes": ""
+    },
+    {
+      "category": "structure",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/meta/main.yml",
+      "status": "complete",
+      "description": "Role metadata.",
+      "notes": "Created standard meta/main.yml"
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/golang/manifests/from_tarball.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/from_tarball.yml",
+      "status": "complete",
+      "description": "Migrate ownership remediation, installation directory management, download, and tarball extraction.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "site/profiles/manifests/golang.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/profile_golang.yml",
+      "status": "complete",
+      "description": "Migrate the profiles::golang entry point and its inclusion of the Golang installation.",
+      "notes": "Source manifest was not present in the supplied checkout; implemented the documented profile entry point."
+    },
+    {
+      "category": "structure",
+      "source_path": "defaults/main.yml",
+      "target_path": "ansible/roles/profiles_golang/meta/argument_specs.yml",
+      "status": "complete",
+      "description": "Role argument specifications for fail-fast validation; generate after defaults/main.yml.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/golang/manifests/init.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/golang_init.yml",
+      "status": "complete",
+      "description": "Migrate Golang defaults, platform mapping, latest-version selection, and orchestration.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/golang/manifests/installation.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/installation.yml",
+      "status": "complete",
+      "description": "Migrate installation path, archive URL generation, ownership, mode, and version handling.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/golang/manifests/linked_binaries.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/linked_binaries.yml",
+      "status": "complete",
+      "description": "Migrate the go and gofmt symlink creation tasks.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/archive/manifests/init.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/archive.yml",
+      "status": "complete",
+      "description": "Migrate the effective archive dependency behavior used to fetch and extract the Go tarball.",
+      "notes": ""
+    },
+    {
+      "category": "molecule",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/molecule/default/verify.yml",
+      "status": "complete",
+      "description": "Molecule verification of the Go installation, binaries, symlink targets, ownership, and mode.",
+      "notes": "Generated verification playbook for real Go installation paths, symlinks, platform prerequisites, and executable behavior."
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/archive/manifests/params.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/archive_params.yml",
+      "status": "complete",
+      "description": "Review and migrate archive parameter behavior relevant to the Linux Go archive path.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/archive/manifests/download.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/archive_download.yml",
+      "status": "complete",
+      "description": "Migrate archive download behavior for the generated public Go download URL.",
+      "notes": ""
+    },
+    {
+      "category": "recipes",
+      "source_path": "migration-dependencies/archive/manifests/go.pp",
+      "target_path": "ansible/roles/profiles_golang/tasks/archive_go.yml",
+      "status": "complete",
+      "description": "Migrate archive extraction behavior used by the Go installation.",
+      "notes": ""
+    },
+    {
+      "category": "molecule",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/molecule/default/converge.yml",
+      "status": "complete",
+      "description": "Molecule convergence that runs the real role through ansible.builtin.include_role.",
+      "notes": "Generated minimal converge playbook that includes profiles_golang for real execution."
+    },
+    {
+      "category": "molecule",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/molecule/default/molecule.yml",
+      "status": "complete",
+      "description": "Molecule scenario configuration using the AAP delegated driver and local connection, not Docker or Podman.",
+      "notes": "Created by MoleculeAgent (deterministic scaffold)"
+    },
+    {
+      "category": "molecule",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/molecule/default/destroy.yml",
+      "status": "complete",
+      "description": "No-op Molecule instance destruction for delegated AAP testing.",
+      "notes": "Created by MoleculeAgent (deterministic scaffold)"
+    },
+    {
+      "category": "molecule",
+      "source_path": "N/A",
+      "target_path": "ansible/roles/profiles_golang/molecule/default/create.yml",
+      "status": "complete",
+      "description": "No-op Molecule instance creation for delegated AAP testing.",
+      "notes": "Created by MoleculeAgent (deterministic scaffold)"
+    }
+  ]
+}
