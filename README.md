@@ -1,3 +1,6 @@
+COPY FROM: https://gitlab.com/binhdt2611/puppet-demo/
+https://turndevopseasier.com/mastering-puppet-implementing-roles-and-profiles-effectively/
+
 # Puppet - Demo Roles and Profiles
 
 This project is a home lab where I explain how to implement Roles and Profiles as the best practice in design pattern for Puppet.
